@@ -1,0 +1,487 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Treningstimer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body style="font-family: Arial !important;" data-bs-theme="dark">
+    <div class="container-fluid h-100 position-relative">
+
+        <div class="position-absolute top-50 start-50 translate-middle position-relative w-100 z-n1">
+            <div class="position-relative pb-3 pt-4">
+                <div
+                    class="mx-auto w-100 d-flex justify-content-around position-absolute top-0 start-50 translate-middle-x">
+                    <p style="font-size: 5vw;" id="topText"></p>
+                </div>
+                <h1 class="text-center p-0 m-0" style="font-size: 30vw;" id="timer"></h1>
+                <div
+                    class="mx-auto w-75 d-flex justify-content-around position-absolute bottom-0 start-50 translate-middle-x">
+                    <p style="font-size: 3vw;">Øvelse <span id="CurrentO">1</span> av <span id="TotalO"></span></p>
+                    <p style="font-size: 3vw;">Runde <span id="CurrentR">1</span> av <span id="TotalR"></span></p>
+                </div>
+                <div
+                    class="mx-auto w-75 d-flex justify-content-center position-absolute bottom-0 start-50 translate-middle-x">
+                    <p style="font-size: 3vw;" class="d-none" id="pausetext">Pause</p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row mx-auto w-75 p-0 position-absolute bottom-0 start-50 translate-middle-x">
+            <div class="col-12 col-lg-4 order-lg-2 mb-3 text-center">
+                <button class="btn btn-outline-primary fs-3" id="previous">
+                    <i class="bi bi-skip-backward-fill"></i>
+                </button>
+                <button class="btn btn-outline-primary fs-3 px-4" id="play">
+                    <i class="bi bi-play-fill"></i><i class="bi bi-pause-fill d-none"></i>
+                </button>
+                <button class="btn btn-outline-primary fs-3" id="next">
+                    <i class="bi bi-skip-forward-fill"></i>
+                </button>
+            </div>
+    
+            <div class="col-6 col-lg-4 order-lg-1 mb-3 text-end">
+                <button class="btn btn-outline-primary fs-3" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                    <i class="bi bi-sliders"></i>
+                </button>
+                <button class="btn btn-outline-primary fs-3" id="reset">
+                    <i class="bi bi-arrow-repeat"></i>
+                </button>
+            </div>
+    
+            <div class="col-6 col-lg-4 order-lg-3 mb-3 text-start">
+                <button class="btn btn-outline-primary fs-3" id="mute">
+                    <i class="bi bi-volume-mute-fill"></i><i class="bi bi-volume-up-fill d-none"></i>
+                </button>
+                <button class="btn btn-outline-primary fs-3" id="heart">
+                    <i class="bi bi-suit-heart-fill"></i>
+                </button>
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    <div class="modal fade" id="settingsModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header ">
+                    <h5 class="modal-title">Innstillinger</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 ">
+                    <form class="m-0">
+                        <div class="row row-cols-1 row-cols-lg-5 mx-0">
+                            <div class="col card p-0 border border-0 rounded-0 mt-0 ">
+                                <div class="card-body py-0">
+                                    <span class="form-label d-flex justify-content-between h-100">
+                                        <div class="my-auto small">Antall øvelser</div>
+                                        <input type="number" name="AntallOInput"
+                                            class="form-control w-50 fs-4 border-0 text-end p-0 shadow-none " min="1"
+                                            max="15" step="1" value="5" oninput="this.form.AntallORange.value=this.value">
+                                    </span>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <input type="range" name="AntallORange" class="form-range" id="customRange1" min="1"
+                                        max="15" step="1" value="5" oninput="this.form.AntallOInput.value=this.value">
+                                </div>
+                            </div>
+                            <div class="col card p-0 border border-0 rounded-0 mt-0 ">
+                                <div class="card-body py-0">
+                                    <span class="form-label d-flex justify-content-between h-100">
+                                        <div class="my-auto small">Tid per øvelse</div>
+                                        <input type="number" name="TidOInput"
+                                            class="form-control w-50 fs-4 border-0 text-end p-0 shadow-none " min="30"
+                                            max="350" step="15" value="60" oninput="this.form.TidORange.value=this.value">
+                                    </span>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <input type="range" name="TidORange" class="form-range" id="customRange2" min="30"
+                                        max="350" step="15" value="120" oninput="this.form.TidOInput.value=this.value">
+                                </div>
+                            </div>
+                            <div class="col card p-0 border border-0 rounded-0 mt-0 ">
+                                <div class="card-body py-0">
+                                    <span class="form-label d-flex justify-content-between h-100">
+                                        <div class="my-auto small">Pause mellom øvelser</div>
+                                        <input type="number" name="PauseOInput"
+                                            class="form-control w-50 fs-4 border-0 text-end p-0 shadow-none " min="0"
+                                            max="120" step="5" value="15" oninput="this.form.PauseORange.value=this.value">
+                                    </span>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <input type="range" name="PauseORange" class="form-range" id="customRange3" min="0"
+                                        max="120" step="5" value="15" oninput="this.form.PauseOInput.value=this.value">
+                                </div>
+                            </div>
+                            <div class="col card p-0 border border-0 rounded-0 mt-0 ">
+                                <div class="card-body py-0">
+                                    <span class="form-label d-flex justify-content-between h-100">
+                                        <div class="my-auto small">Antall runder</div>
+                                        <input type="number" name="AntallRInput"
+                                            class="form-control w-50 fs-4 border-0 text-end p-0 shadow-none " min="1"
+                                            max="5" step="1" value="2" oninput="this.form.AntallRRange.value=this.value">
+                                    </span>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <input type="range" name="AntallRRange" class="form-range " id="customRange4" min="1"
+                                        max="5" step="1" value="2" oninput="this.form.AntallRInput.value=this.value">
+                                </div>
+                            </div>
+                            <div class="col card p-0 border border-0 rounded-0 mt-0 ">
+                                <div class="card-body py-0">
+                                    <span class="form-label d-flex justify-content-between h-100">
+                                        <div class="my-auto small">Pause mellom runder</div>
+                                        <input type="number" name="PauseRInput"
+                                            class="form-control w-50 fs-4 border-0 text-end p-0 shadow-none " min="0"
+                                            max="240" step="15" value="60" oninput="this.form.PauseRRange.value=this.value">
+                                    </span>
+                                </div>
+                                <div class="card-footer border-0">
+                                    <input type="range" name="PauseRRange" class="form-range " id="customRange5" min="0"
+                                        max="240" step="15" value="60" oninput="this.form.PauseRInput.value=this.value">
+                                </div>
+                            </div>
+    
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+
+<script>
+    const sound1 = new Audio('https://cdn.freesound.org/previews/641/641042_11537497-lq.mp3');
+    sound1.volume = 0.5;
+    const sound2 = new Audio('https://cdn.freesound.org/previews/680/680825_177850-lq.mp3');
+    const sound3 = new Audio('https://cdn.freesound.org/previews/448/448266_8282364-lq.mp3');
+
+    let NumExercises = document.querySelector('input[name="AntallOInput"]');
+    let TimePerExercise = document.querySelector('input[name="TidOInput"]');
+    let TimePerRestSmall = document.querySelector('input[name="PauseOInput"]');
+    let NumRounds = document.querySelector('input[name="AntallRInput"]');
+    let TimePerRestLarge = document.querySelector('input[name="PauseRInput"]');
+
+    let currentExercise = document.getElementById('CurrentO');
+    let currentRound = document.getElementById('CurrentR');
+    let totalExercise = document.getElementById('TotalO');
+    let totalRound = document.getElementById('TotalR');
+    let currentExerciseCount = 1;
+    let currentRoundCount = 1;
+
+    let playButton = document.getElementById('play');
+    let timerDisplay = document.getElementById('timer');
+    let timerInterval;
+    let remainingTime = parseInt(TimePerExercise.value, 10);
+
+    let isRunning = false;
+    let isExercise = true;
+    let isStarted = false;
+    let soundMuted = false;
+    var myModal = new bootstrap.Modal(document.getElementById('settingsModal'))
+
+    function updateTimerDisplay() {
+        let displayMinutes = Math.floor(remainingTime / 60).toString().padStart(2, '0');
+        let displaySeconds = (remainingTime % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        isRunning = false;
+        isStarted = false;
+        remainingTime = parseInt(TimePerExercise.value, 10);
+        currentExerciseCount = 1;
+        currentRoundCount = 1;
+        isExercise = true;
+        currentExercise.textContent = currentExerciseCount;
+        currentRound.textContent = currentRoundCount;
+        updateTimerDisplay();
+        document.getElementById('pausetext').classList.add('d-none');
+        playButton.querySelector('.bi-play-fill').classList.remove('d-none');
+        playButton.querySelector('.bi-pause-fill').classList.add('d-none');
+        document.getElementById('topText').textContent = "";
+    }
+
+    function toggleTimer() {
+        if (isRunning) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            document.getElementById('pausetext').classList.remove('d-none');
+            playButton.querySelector('.bi-play-fill').classList.remove('d-none');
+            playButton.querySelector('.bi-pause-fill').classList.add('d-none');
+        } else {
+            document.getElementById('pausetext').classList.add('d-none');
+            playButton.querySelector('.bi-play-fill').classList.add('d-none');
+            playButton.querySelector('.bi-pause-fill').classList.remove('d-none');
+            timerInterval = setInterval(runTimer, 1000);
+            isRunning = true;
+        }
+    }
+
+    function startProcedure() {
+        let countdown = 4;
+        let countdownInterval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                if (countdown === 3 || countdown === 2 || countdown === 1) {
+                    sound1.pause()
+                    sound1.currentTime = 0;
+                    sound1.play();
+                    document.getElementById('topText').textContent = countdown;
+                }
+            } else {
+                clearInterval(countdownInterval);
+                document.getElementById('topText').textContent = "Tren!!!";
+                sound2.play();
+                toggleTimer(); // Start the actual timer
+            }
+        }, 1000);
+    }
+
+    function runTimer() {
+        if (remainingTime > 0) {
+            if (remainingTime === 4 || remainingTime === 3 || remainingTime === 2) {
+                sound1.pause()
+                sound1.currentTime = 0;
+                sound1.play();
+            }
+            if (remainingTime === 1) {
+                sound2.play();
+            }
+            remainingTime--;
+            updateTimerDisplay();
+        } else {
+            if (isExercise) {
+                if (currentExerciseCount == parseInt(NumExercises.value, 10)) {
+                    if (currentRoundCount == parseInt(NumRounds.value, 10)) {
+                        clearInterval(timerInterval);
+                        sound3.play();
+                        isRunning = false;
+                        fireworks();
+                        document.getElementById('topText').textContent = "Treningen er ferdig!";
+                        return;
+                    }
+                    remainingTime = parseInt(TimePerRestLarge.value, 10);
+                } else {
+
+                    remainingTime = parseInt(TimePerRestSmall.value, 10);
+                }
+                isExercise = false;
+                document.getElementById('topText').textContent = "Pause";
+            } else {
+                currentExerciseCount++;
+                if (currentExerciseCount > parseInt(NumExercises.value, 10)) {
+                    currentExerciseCount = 1;
+                    currentRoundCount++;
+                    currentRound.textContent = currentRoundCount;
+                }
+                remainingTime = parseInt(TimePerExercise.value, 10);
+                isExercise = true;
+                document.getElementById('topText').textContent = "Tren!!!";
+            }
+            currentExercise.textContent = currentExerciseCount;
+            updateTimerDisplay();
+        }
+    }
+    function handleNext() {
+        if (currentExerciseCount == parseInt(NumExercises.value, 10) && currentRoundCount == parseInt(NumRounds.value, 10)) {
+            return;
+        }
+        if (currentExerciseCount < parseInt(NumExercises.value, 10)) {
+            currentExerciseCount++;
+        } else {
+            if (currentRoundCount < parseInt(NumRounds.value, 10)) {
+                currentRoundCount++;
+                currentExerciseCount = 1;
+            }
+        }
+        remainingTime = parseInt(TimePerExercise.value, 10);
+        document.getElementById('topText').textContent = "";
+        isStarted = false;
+        isExercise = false;
+        isRunning = false;
+        clearInterval(timerInterval);
+        document.getElementById('pausetext').classList.remove('d-none');
+        playButton.querySelector('.bi-play-fill').classList.remove('d-none');
+        playButton.querySelector('.bi-pause-fill').classList.add('d-none');
+        currentExercise.textContent = currentExerciseCount;
+        currentRound.textContent = currentRoundCount;
+        updateTimerDisplay();
+    }
+    function handlePrevious() {
+        if (currentExerciseCount > 1) {
+            currentExerciseCount--;
+        } else {
+            if (currentRoundCount > 1) {
+                currentRoundCount--;
+                currentExerciseCount = parseInt(NumExercises.value, 10);
+            }
+        }
+        remainingTime = parseInt(TimePerExercise.value, 10);
+        document.getElementById('topText').textContent = "";
+        isStarted = false;
+        isExercise = false;
+        isRunning = false;
+        clearInterval(timerInterval);
+        document.getElementById('pausetext').classList.remove('d-none');
+        playButton.querySelector('.bi-play-fill').classList.remove('d-none');
+        playButton.querySelector('.bi-pause-fill').classList.add('d-none');
+        currentExercise.textContent = currentExerciseCount;
+        currentRound.textContent = currentRoundCount;
+        updateTimerDisplay();
+    }
+
+    function toggleMute() {
+        if (soundMuted) {
+            sound1.muted = false;
+            sound2.muted = false;
+            sound3.muted = false;
+            soundMuted = false;
+            document.getElementById('mute').querySelector('.bi-volume-mute-fill').classList.remove('d-none');
+            document.getElementById('mute').querySelector('.bi-volume-up-fill').classList.add('d-none');
+        } else {
+            sound1.muted = true;
+            sound2.muted = true;
+            sound3.muted = true;
+            soundMuted = true;
+            document.getElementById('mute').querySelector('.bi-volume-mute-fill').classList.add('d-none');
+            document.getElementById('mute').querySelector('.bi-volume-up-fill').classList.remove('d-none');
+        }
+    }
+
+    // Set initial values for the timer display and total exercises/rounds
+    window.addEventListener('load', function () {
+        let totalSeconds = parseInt(TimePerExercise.value, 10);
+        let displayMinutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        let displaySeconds = (totalSeconds % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
+
+        totalExercise.textContent = NumExercises.value;
+        totalRound.textContent = NumRounds.value;
+    });
+
+    // event listeners for input changes
+    document.querySelector('input[name="AntallORange"]').addEventListener('input', function () {
+        totalExercise.textContent = this.value;
+    });
+    document.querySelector('input[name="AntallRRange"]').addEventListener('input', function () {
+        totalRound.textContent = this.value;
+    });
+    document.querySelector('input[name="TidORange"]').addEventListener('input', function () {
+        remainingTime = parseInt(this.value, 10);
+        let totalSeconds = parseInt(this.value, 10);
+        let displayMinutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        let displaySeconds = (totalSeconds % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
+    });
+    NumExercises.addEventListener('input', function () {
+        totalExercise.textContent = NumExercises.value;
+    });
+    NumRounds.addEventListener('input', function () {
+        totalRound.textContent = NumRounds.value;
+    });
+    TimePerExercise.addEventListener('input', function () {
+        remainingTime = parseInt(this.value, 10);
+        let totalSeconds = parseInt(TimePerExercise.value, 10);
+        let displayMinutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        let displaySeconds = (totalSeconds % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
+    });
+
+    // Event listeners for buttons and keyboard shortcuts
+    playButton.addEventListener('click', function () {
+        if (!isStarted) {
+            startProcedure();
+            isStarted = true;
+        } else {
+            toggleTimer();
+        }
+    });
+    document.getElementById('reset').addEventListener('click', resetTimer);
+    document.getElementById('next').addEventListener('click', handleNext);
+    document.getElementById('previous').addEventListener('click', handlePrevious);
+    document.getElementById('mute').addEventListener('click', toggleMute);
+    document.getElementById('heart').addEventListener('click', fireworks);
+    document.addEventListener('keydown', function (event) {
+        if (event.code === 'KeyS') {
+            event.preventDefault();
+            myModal.toggle()
+        }
+        if (document.getElementById('settingsModal').classList.contains('show')) {
+            return; // Do nothing if the settings modal is visible
+        }
+        if (event.code === 'Space') {
+            event.preventDefault();
+            if (!isStarted) {
+                startProcedure();
+                isStarted = true;
+            } else {
+                toggleTimer();
+            }
+        }
+
+        if (event.code === 'KeyR') {
+            event.preventDefault();
+            resetTimer();
+        }
+        if (event.code === 'KeyM') {
+            event.preventDefault();
+            toggleMute();
+        }
+        if (event.code === 'ArrowRight') {
+            event.preventDefault();
+            handleNext();
+        }
+        if (event.code === 'ArrowLeft') {
+            event.preventDefault();
+            handlePrevious();
+        }
+
+    });
+
+    // Fireworks animation
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    function fireworks() {
+        const duration = 5 * 1000,
+            animationEnd = Date.now() + duration,
+            defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+        const interval = setInterval(function () {
+            const timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            const particleCount = 50 * (timeLeft / duration);
+
+            // since particles fall down, start a bit higher than random
+            confetti(
+                Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                })
+            );
+            confetti(
+                Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                })
+            );
+        }, 250);
+    }
+
+</script>
+
+</html>
